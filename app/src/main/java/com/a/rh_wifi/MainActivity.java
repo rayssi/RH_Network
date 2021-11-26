@@ -34,7 +34,6 @@ ProgressBar ProgressBar;
                  Intent intent=new Intent(MainActivity.this,MainActivity2.class);
                  startActivity(intent);
 
-
              }
          });
 
