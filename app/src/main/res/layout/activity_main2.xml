@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="199dp"
+        android:layout_height="149dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <TextView
+        android:id="@+id/LabelName"
+        android:layout_width="105dp"
+        android:layout_height="36dp"
+
+        android:text="TextView"
+        android:textColor="#009688"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.351" />
+
+    <TextView
+        android:id="@+id/labelName"
+        android:layout_width="117dp"
+        android:layout_height="34dp"
+        android:background="@android:drawable/editbox_background"
+        android:text="Latitude"
+        android:textColor="#010706"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.352" />
+
+    <TextView
+        android:id="@+id/labelName4"
+        android:layout_width="117dp"
+        android:layout_height="34dp"
+        android:background="@android:drawable/editbox_background"
+        android:text="Longitude"
+        android:textColor="#010706"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404" />
+
+    <TextView
+        android:id="@+id/labelName6"
+        android:layout_width="117dp"
+        android:layout_height="34dp"
+        android:background="@android:drawable/editbox_background"
+        android:text="Latitude"
+        android:textColor="#010706"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.003"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
+
+    <TextView
+        android:id="@+id/ValueLatitude"
+        android:layout_width="293dp"
+        android:layout_height="36dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="unknown"
+        android:textColor="#59D35D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.909"
+        app:layout_constraintStart_toStartOf="@id/LabelName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.351" />
+
+    <TextView
+        android:id="@+id/LongitudeValue"
+        android:layout_width="293dp"
+        android:layout_height="36dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="unknown"
+        android:textColor="#59D35D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.957"
+        app:layout_constraintStart_toStartOf="@id/LabelName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.402" />
+
+    <TextView
+        android:id="@+id/CurrentTIme"
+        android:layout_width="196dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="CurrentTIme :"
+        android:textColor="#2196F3"
+        android:textSize="10sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.257" />
+
+    <TextView
+        android:id="@+id/NTPTIme"
+        android:layout_width="196dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="200dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="NTPTIme :"
+        android:textColor="#673AB7"
+        android:textSize="10sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.257" />
+
+    <TextView
+        android:id="@+id/offset"
+        android:layout_width="138dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="144dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="Offset:"
+        android:textColor="#BD0918"
+        android:textSize="12sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.304" />
+
+    <TextView
+        android:id="@+id/value5"
+        android:layout_width="293dp"
+        android:layout_height="36dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="TextView"
+        android:textColor="#59D35D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.962"
+        app:layout_constraintStart_toStartOf="@id/LabelName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
