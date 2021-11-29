@@ -4,13 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:drawable/gallery_thumb"
     tools:context=".MainActivity2">
 
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+        android:layout_width="60dp"
+        android:layout_height="49dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="199dp"
         android:layout_height="149dp"
+        android:background="@android:drawable/editbox_dropdown_light_frame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,36 +33,36 @@
         app:layout_constraintVertical_bias="0.01"
         app:srcCompat="@android:drawable/ic_delete" />
 
-    <TextView
-        android:id="@+id/LabelName"
-        android:layout_width="105dp"
-        android:layout_height="36dp"
-
-        android:text="TextView"
-        android:textColor="#009688"
+    <ScrollView
+        android:layout_width="353dp"
+        android:layout_height="344dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.351" />
-
-    <TextView
-        android:id="@+id/labelName"
-        android:layout_width="117dp"
-        android:layout_height="34dp"
-        android:background="@android:drawable/editbox_background"
-        android:text="Latitude"
-        android:textColor="#010706"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintHorizontal_bias="0.457"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.948">
+
+        <LinearLayout
+
+            android:id="@+id/data"
+            android:layout_width="372dp"
+            android:layout_height="365dp"
+            android:orientation="vertical"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.609"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.983"></LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/labelName4"
-        android:layout_width="117dp"
-        android:layout_height="34dp"
+        android:layout_width="111dp"
+        android:layout_height="35dp"
         android:background="@android:drawable/editbox_background"
         android:text="Longitude"
         android:textColor="#010706"
@@ -59,48 +74,31 @@
         app:layout_constraintVertical_bias="0.404" />
 
     <TextView
-        android:id="@+id/labelName6"
-        android:layout_width="117dp"
-        android:layout_height="34dp"
+        android:id="@+id/LongitudeValue"
+        android:layout_width="262dp"
+        android:layout_height="33dp"
         android:background="@android:drawable/editbox_background"
-        android:text="Latitude"
-        android:textColor="#010706"
+        android:shadowColor="#FFFFFF"
+        android:text="unknown"
+        android:textColor="#59D35D"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.003"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.402" />
 
     <TextView
         android:id="@+id/ValueLatitude"
-        android:layout_width="293dp"
-        android:layout_height="36dp"
+        android:layout_width="262dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="4dp"
         android:background="@android:drawable/editbox_background"
         android:shadowColor="#FFFFFF"
         android:text="unknown"
         android:textColor="#59D35D"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.909"
-        app:layout_constraintStart_toStartOf="@id/LabelName"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.351" />
-
-    <TextView
-        android:id="@+id/LongitudeValue"
-        android:layout_width="293dp"
-        android:layout_height="36dp"
-        android:background="@android:drawable/editbox_background"
-        android:shadowColor="#FFFFFF"
-        android:text="unknown"
-        android:textColor="#59D35D"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.957"
-        app:layout_constraintStart_toStartOf="@id/LabelName"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.402" />
+        app:layout_constraintVertical_bias="0.353" />
 
     <TextView
         android:id="@+id/CurrentTIme"
@@ -151,17 +149,42 @@
         app:layout_constraintVertical_bias="0.304" />
 
     <TextView
-        android:id="@+id/value5"
-        android:layout_width="293dp"
-        android:layout_height="36dp"
+        android:id="@+id/labelName"
+        android:layout_width="117dp"
+        android:layout_height="34dp"
         android:background="@android:drawable/editbox_background"
-        android:shadowColor="#FFFFFF"
-        android:text="TextView"
-        android:textColor="#59D35D"
+        android:text="Latitude"
+        android:textColor="#010706"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="@id/LabelName"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.352" />
+
+    <ImageView
+        android:id="@+id/Reload"
+        android:layout_width="37dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:background="#5E887D7D"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/stat_notify_sync" />
+
+    <ImageView
+        android:id="@+id/FIle"
+        android:layout_width="37dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="72dp"
+        android:background="#4A989898"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:srcCompat="@android:drawable/stat_sys_download_done" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,9 +28,11 @@ ProgressBar ProgressBar;
                  ButtonStart.setColorFilter(Color.GREEN);
                  try {
                      Thread.sleep(1000);
+
                  } catch (InterruptedException e) {
                      e.printStackTrace();
                  }
+
                  Intent intent=new Intent(MainActivity.this,MainActivity2.class);
                  startActivity(intent);
 
