@@ -7,33 +7,27 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -44,28 +38,22 @@ import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.content.Context.TELECOM_SERVICE;
-
 public class MainActivity2 extends AppCompatActivity {
     private static String NTPTime = null;
     private static String NTPDate = null;
     TextView LongitudeView, LatitudeView, CurrenDateView, NTPDateView, OffsetTimeView;
-    ImageView imageView, Reload, CreateFile;
+    ImageView imageView, Reload, CreateFile, ReadFile;
     String CurrentDate = null, Offset = null, CureentTime = null, data;
     public static final String TIME_SERVER = "time-a.nist.gov";
     ProgressBar ProgressBar;
@@ -82,8 +70,10 @@ public class MainActivity2 extends AppCompatActivity {
         Reload = findViewById(R.id.Reload);
         ProgressBar = findViewById(R.id.progressBar2);
         ProgressBar.setVisibility(View.VISIBLE);
+        ReadFile = findViewById(R.id.readfile);
+        CreateFile = findViewById(R.id.writeFile);
 
-        CreateFile = findViewById(R.id.FIle);
+
         try {
             Thread.sleep(2000);
             ProgressBar.setVisibility(View.INVISIBLE);
@@ -98,8 +88,9 @@ public class MainActivity2 extends AppCompatActivity {
         OffsetTimeView = findViewById(R.id.offset);
 
         imageView = findViewById(R.id.imageView);
-
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.data);
+
+
         Reload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,6 +127,8 @@ public class MainActivity2 extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(" time exception", "exception time " + e);
         }
+
+
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
         NetworkInfo[] NetInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : NetInfo) {
@@ -171,38 +164,28 @@ public class MainActivity2 extends AppCompatActivity {
         CreateFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 try {
-
-                    String rootPath = Environment.getExternalStorageDirectory()
-                            .getAbsolutePath() + "/MyFolder/";
+                    String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MyFolder/";
                     File root = new File(rootPath);
                     if (!root.exists()) {
                         root.mkdirs();
                     }
-                    File f = new File(rootPath + "Mesures.txt");
-                    // if (f.exists()) {
-                    //   f.delete();
-                    // f.createNewFile();
-                    // }
-
+                    Date GetCurrentTime = Calendar.getInstance().getTime();
+                    String Date = DateFormat.format("yyyy-MM-dd HH:mm:ss", GetCurrentTime).toString();
+                    File f = new File(rootPath + "RH_Network"+"_"+ Date+"_"+"Report.csv");
                     if (!f.exists()) {
                         f.createNewFile();
-                        ;
+                        Toast.makeText(getApplicationContext(), "File 'Report' created ", Toast.LENGTH_LONG).show();
                     }
                     FileOutputStream out = new FileOutputStream(f);
                     out.flush();
                     out.close();
-
                     try {
-                        writeFileOnInternalStorage(getApplicationContext(), "Mesures.txt", data);
-                        readFileOnInternalStorage("Mesures.txt",getApplicationContext());
-
+                        writeFileOnInternalStorage("Report.csv", data);
+                        Toast.makeText(getApplicationContext(), " data added to 'Report.csv' with success  ", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -211,7 +194,25 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
+
+        ReadFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    File path = new File(Environment.getExternalStorageDirectory() + "/MyFolder/");
+                    Intent intent = getPackageManager().getLaunchIntentForPackage("com.sec.android.app.myfiles");
+                    intent.setAction("samsung.myfiles.intent.action.LAUNCH_MY_FILES");
+                    intent.putExtra("samsung.myfiles.intent.extra.START_PATH", path.getAbsolutePath());
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity2.this, "Please add data to your file " + e, Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
     }
+
 
     void Time() {
         Date GetCurrentTime = Calendar.getInstance().getTime();
@@ -219,6 +220,7 @@ public class MainActivity2 extends AppCompatActivity {
         String Date = DateFormat.format("yyyy-MM-dd HH:mm:ss", GetCurrentTime).toString();
         CurrentDate = Date;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void GetNTPTime() throws IOException {
@@ -231,6 +233,7 @@ public class MainActivity2 extends AppCompatActivity {
         String Date = DateFormat.format("yyyy-MM-dd HH:mm:ss", cal).toString();
         NTPDate = Date;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void GetOffset(String CurrentDate, String FinalDate) {
@@ -251,6 +254,7 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
     }
+
 
     void WIFI(String string, LinearLayout linearLayout) {
         String[] parts = string.split(",");
@@ -367,8 +371,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-
-    public void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody) {
+    public void writeFileOnInternalStorage(String sFileName, String sBody) {
         String rootPath = Environment.getExternalStorageDirectory()
                 .getAbsolutePath() + "/MyFolder/";
         File root = new File(rootPath);
@@ -387,62 +390,16 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-
-
-    public void readFileOnInternalStorage(String sFileName,Context context) {
-        String rootPath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/MyFolder/";
-        File root = new File(rootPath);
-        if (!root.exists()) {
-            root.mkdirs();
-        }
-
-
-        File file = new File(root, sFileName);
-
-
-        //Read text from file
-        StringBuilder text = new StringBuilder();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
-
-            }
-            br.close();
-
-        } catch (IOException e) {
-            //You'll need to add proper error handling here
-        }
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-      //  Alert(text,context);
-    }
-    void Alert(StringBuilder Message, Context context){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setMessage(Message.toString());
-        builder1.setCancelable(true);
-
-        builder1.setPositiveButton(
-                "Yes",
+    void Alert(StringBuilder Message, Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Report: ");
+        alertDialog.setMessage(Message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 });
-
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+        alertDialog.show();
     }
 }

@@ -167,7 +167,7 @@
         android:layout_width="37dp"
         android:layout_height="36dp"
         android:layout_marginTop="16dp"
-        android:background="#5E887D7D"
+        android:background="@android:drawable/btn_default_small"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.042"
@@ -176,15 +176,27 @@
         app:srcCompat="@android:drawable/stat_notify_sync" />
 
     <ImageView
-        android:id="@+id/FIle"
+        android:id="@+id/writeFile"
         android:layout_width="37dp"
         android:layout_height="36dp"
-        android:layout_marginTop="72dp"
-        android:background="#4A989898"
+        android:layout_marginTop="56dp"
+        android:background="@android:drawable/btn_default_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@android:drawable/stat_sys_download_done" />
+
+    <ImageView
+        android:id="@+id/readfile"
+        android:layout_width="37dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="112dp"
+        android:background="@android:drawable/btn_default_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:srcCompat="?android:attr/actionModeFindDrawable" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
