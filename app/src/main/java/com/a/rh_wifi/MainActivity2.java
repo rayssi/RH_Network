@@ -10,14 +10,17 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,6 +55,7 @@ import java.util.Locale;
 public class MainActivity2 extends AppCompatActivity {
     private static String NTPTime = null;
     private static String NTPDate = null;
+    private TextView batteryTxt;
     TextView LongitudeView, LatitudeView, CurrenDateView, NTPDateView, OffsetTimeView;
     ImageView imageView, Reload, CreateFile, ReadFile;
     String CurrentDate = null, Offset = null, CureentTime = null, data;
@@ -160,6 +164,9 @@ public class MainActivity2 extends AppCompatActivity {
 
         }
 
+        batteryTxt=findViewById(R.id.batteryTxt);
+        this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
 
         CreateFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +188,7 @@ public class MainActivity2 extends AppCompatActivity {
                     out.flush();
                     out.close();
                     try {
-                        writeFileOnInternalStorage("Report.csv", data);
+                        writeFileOnInternalStorage("RH_Network" + "_" + Date+"_"+"Report.csv", data);
                         Toast.makeText(getApplicationContext(), " data added to 'Report.csv' with success  ", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -212,7 +219,15 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
     }
-
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context ctxt, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            float batteryPct = level * 100 / (float)scale;
+            batteryTxt.setText(String.valueOf(batteryPct) + "%");
+        }
+    };
 
     void Time() {
         Date GetCurrentTime = Calendar.getInstance().getTime();
