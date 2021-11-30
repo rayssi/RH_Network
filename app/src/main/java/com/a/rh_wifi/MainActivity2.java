@@ -164,7 +164,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         }
 
-        batteryTxt=findViewById(R.id.batteryTxt);
+        batteryTxt = findViewById(R.id.batteryTxt);
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
 
@@ -179,7 +179,7 @@ public class MainActivity2 extends AppCompatActivity {
                     }
                     Date GetCurrentTime = Calendar.getInstance().getTime();
                     String Date = DateFormat.format("yyyy-MM-dd HH:mm:ss", GetCurrentTime).toString();
-                    File f = new File(rootPath + "RH_Network"+"_"+ Date+"_"+"Report.csv");
+                    File f = new File(rootPath + "RH_Network" + "_" + Date + "_" + "Report.csv");
                     if (!f.exists()) {
                         f.createNewFile();
                         Toast.makeText(getApplicationContext(), "File 'Report' created ", Toast.LENGTH_LONG).show();
@@ -188,7 +188,7 @@ public class MainActivity2 extends AppCompatActivity {
                     out.flush();
                     out.close();
                     try {
-                        writeFileOnInternalStorage("RH_Network" + "_" + Date+"_"+"Report.csv", data);
+                        writeFileOnInternalStorage("RH_Network" + "_" + Date + "_" + "Report.csv", data);
                         Toast.makeText(getApplicationContext(), " data added to 'Report.csv' with success  ", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -219,12 +219,13 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
     }
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            float batteryPct = level * 100 / (float)scale;
+            float batteryPct = level * 100 / (float) scale;
             batteryTxt.setText(String.valueOf(batteryPct) + "%");
         }
     };
