@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,14 +16,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -40,23 +41,22 @@ import android.widget.Toast;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity2 extends AppCompatActivity {
     private static String NTPTime = null;
     private static String NTPDate = null;
     private TextView batteryTxt;
-    TextView LongitudeView, LatitudeView, CurrenDateView, NTPDateView, OffsetTimeView;
+    TextView NetworkMCCMNC, MCCMNCSIMView, CurrenDateView, NTPDateView, OffsetTimeView, PositionView;
     ImageView imageView, Reload, CreateFile, ReadFile;
     String CurrentDate = null, Offset = null, CureentTime = null, data;
     public static final String TIME_SERVER = "time-a.nist.gov";
@@ -65,6 +65,8 @@ public class MainActivity2 extends AppCompatActivity {
     String TAG = "PhoneActivityTAG";
     String WantPermission = Manifest.permission.READ_PHONE_STATE;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private double longitude;
+    private double latitude;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -76,7 +78,7 @@ public class MainActivity2 extends AppCompatActivity {
         ProgressBar.setVisibility(View.VISIBLE);
         ReadFile = findViewById(R.id.readfile);
         CreateFile = findViewById(R.id.writeFile);
-
+        NetworkMCCMNC = findViewById(R.id.ValueMNCMCCNET);
 
         try {
             Thread.sleep(2000);
@@ -85,14 +87,17 @@ public class MainActivity2 extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        LongitudeView = findViewById(R.id.LongitudeValue);
-        LatitudeView = findViewById(R.id.ValueLatitude);
+        PositionView = findViewById(R.id.LongitudeValue);
+        MCCMNCSIMView = findViewById(R.id.ValueMNCMCCSIM);
         CurrenDateView = findViewById(R.id.CurrentTIme);
         NTPDateView = findViewById(R.id.NTPTIme);
         OffsetTimeView = findViewById(R.id.offset);
 
         imageView = findViewById(R.id.imageView);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.data);
+
+
+        getPosition();
 
 
         Reload.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +127,14 @@ public class MainActivity2 extends AppCompatActivity {
                         CurrenDateView.setText("Current Time : " + CurrentDate);
                         NTPDateView.setText("NTPTime : " + NTPDate);
                         OffsetTimeView.setText(" Offset:  " + Offset);
-
+                        getMCCMNCNET();
+                        TelephonyManager tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                        String networkOperator = tel.getNetworkOperator();
+                        if (networkOperator != null) {
+                            int mcc = Integer.parseInt(networkOperator.substring(0, 3));
+                            int mnc = Integer.parseInt(networkOperator.substring(3));
+                            NetworkMCCMNC.setText("MNC: " + mnc + "   " + "MCC: " + mcc);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -417,5 +429,62 @@ public class MainActivity2 extends AppCompatActivity {
                     }
                 });
         alertDialog.show();
+    }
+
+    void getPosition() {
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationManager myLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        MyLocation myLocation = new MyLocation();
+
+
+        MyLocation.LocationResult locationResult = new MyLocation.LocationResult() {
+
+            @Override
+            public void gotLocation(Location location) {
+
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                PositionView.setText("latitude: " + latitude + "       " + "Longitude: " + longitude);
+            }
+        };
+        myLocation.getLocation(getApplicationContext(), locationResult);
+    }
+
+    void getMCCMNCNET() {
+
+        TelephonyManager phoneMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), WantPermission) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        // int mcc = Integer.parseInt(Integer.valueOf(phoneMgr.getSubscriberId()).substring(0, 3));
+        // int mnc = Integer.parseInt(phoneMgr.getSubscriberId().substring(3));
+        if ((phoneMgr.getSubscriberId()).length() > 0) {
+            MCCMNCSIMView.setText("MNC: " + (phoneMgr.getSubscriberId()).substring(3, 5) + "   " + "MCC: " + (phoneMgr.getSubscriberId()).substring(0, 3));
+        }
+
+       /* Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();*/
+
+
     }
 }

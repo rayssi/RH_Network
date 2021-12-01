@@ -8,6 +8,22 @@
     tools:context=".MainActivity2">
 
 
+    <TextView
+        android:id="@+id/ValueMNCMCCNET"
+        android:layout_width="262dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="4dp"
+        android:background="@android:drawable/editbox_background"
+        android:shadowColor="#FFFFFF"
+        android:text="unknown"
+        android:textColor="#647EA5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/labelName4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.408" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="197dp"
@@ -101,38 +117,39 @@
         android:layout_width="111dp"
         android:layout_height="35dp"
         android:background="@android:drawable/editbox_background"
-        android:text="Longitude"
+        android:text="Network"
         android:textColor="#010706"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintHorizontal_bias="0.006"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.404" />
+        app:layout_constraintVertical_bias="0.406" />
 
     <TextView
         android:id="@+id/LongitudeValue"
-        android:layout_width="222dp"
-        android:layout_height="29dp"
-        android:layout_marginEnd="32dp"
+        style="@android:style/Widget.Holo.Light.TextView"
+        android:layout_width="401dp"
+        android:layout_height="34dp"
         android:background="@android:drawable/editbox_background"
         android:shadowColor="#FFFFFF"
         android:text="unknown"
-        android:textColor="#59D35D"
+        android:textColor="#0AE10E"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.403" />
+        app:layout_constraintVertical_bias="0.465" />
 
     <TextView
-        android:id="@+id/ValueLatitude"
+        android:id="@+id/ValueMNCMCCSIM"
         android:layout_width="262dp"
         android:layout_height="33dp"
         android:layout_marginEnd="4dp"
         android:background="@android:drawable/editbox_background"
         android:shadowColor="#FFFFFF"
         android:text="unknown"
-        android:textColor="#59D35D"
+        android:textColor="#6A73A5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -207,7 +224,7 @@
         android:layout_width="117dp"
         android:layout_height="34dp"
         android:background="@android:drawable/editbox_background"
-        android:text="Latitude"
+        android:text="SimCard"
         android:textColor="#010706"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
