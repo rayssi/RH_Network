@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#74E3DBDB"
+    android:background="@mipmap/ic_background_image_24_foreground"
     tools:context=".MainActivity">
 
     <ImageView
@@ -21,9 +21,11 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
-        android:layout_width="69dp"
-        android:layout_height="67dp"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="106dp"
+        android:layout_height="82dp"
+        android:outlineAmbientShadowColor="@color/common_google_signin_btn_text_dark"
+        android:soundEffectsEnabled="true"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
