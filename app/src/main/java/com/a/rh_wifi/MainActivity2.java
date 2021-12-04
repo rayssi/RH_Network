@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
@@ -196,14 +197,14 @@ public class MainActivity2 extends AppCompatActivity {
                     File f = new File(rootPath + "RH_Network" + "_" + Date + "_" + "Report.csv");
                     if (!f.exists()) {
                         f.createNewFile();
-                        Toast.makeText(getApplicationContext(), "File 'Report' created ", Toast.LENGTH_LONG).show();
                     }
                     FileOutputStream out = new FileOutputStream(f);
                     out.flush();
                     out.close();
                     try {
                         writeFileOnInternalStorage("RH_Network" + "_" + Date + "_" + "Report.csv", data);
-                        Toast.makeText(getApplicationContext(), " Data added  with success  ", Toast.LENGTH_LONG).show();
+                        Alert("Do you want to take a screenshot?",MainActivity2.this);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -427,18 +428,27 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-   /* void Alert(StringBuilder Message, Context context) {
+    void Alert(String Message, Context context) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Report: ");
+        alertDialog.setTitle("screenshot ");
         alertDialog.setMessage(Message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OUI",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        takeScreenshot();
+                        dialog.dismiss();
+                        Toast.makeText(getApplicationContext(), " Data added  with success  ", Toast.LENGTH_LONG).show();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        Toast.makeText(getApplicationContext(), " Data added  with success  ", Toast.LENGTH_LONG).show();
                     }
                 });
         alertDialog.show();
-    }*/
+    }
 
     void getPosition() {
 
@@ -488,5 +498,34 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
+}
+    private void takeScreenshot() {
+        Date GetCurrentTime = Calendar.getInstance().getTime();
+        String Date = DateFormat.format("yyyy_MM_dd_HH_mm_ss", GetCurrentTime).toString();
+
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MyFolder/"+"RH_Network" + "_" + Date +".jpg";
+
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
     }
 }
