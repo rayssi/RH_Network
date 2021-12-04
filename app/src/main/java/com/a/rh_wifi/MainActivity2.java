@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -58,7 +59,7 @@ public class MainActivity2 extends AppCompatActivity {
     private TextView batteryTxt;
     TextView NetworkMCCMNC, MCCMNCSIMView, CurrenDateView, NTPDateView, OffsetTimeView, PositionView;
     ImageView imageView, Reload, CreateFile, ReadFile;
-    String CurrentDate = null, Offset = null, CureentTime = null, data;
+    String CurrentDate = null, Offset = null, CureentTime = null, data="";
     public static final String TIME_SERVER = "time-a.nist.gov";
     ProgressBar ProgressBar;
     Wifidata wifidata = new Wifidata();
@@ -127,7 +128,7 @@ public class MainActivity2 extends AppCompatActivity {
                         CurrenDateView.setText("Current Time : " + CurrentDate);
                         NTPDateView.setText("NTPTime : " + NTPDate);
                         OffsetTimeView.setText(" Offset:  " + Offset);
-                        getMCCMNCNET();
+
                         TelephonyManager tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         String networkOperator = tel.getNetworkOperator();
                         if (networkOperator != null) {
@@ -164,6 +165,7 @@ public class MainActivity2 extends AppCompatActivity {
                         try {
                             SIM(linearLayout, getPhone());
                             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_orange_telecom));
+                            getMCCMNCNET();
                         } catch (Exception e) {
                             Log.d(TAG, "Exception SIM INFO " + e);
                         }
@@ -190,7 +192,7 @@ public class MainActivity2 extends AppCompatActivity {
                         root.mkdirs();
                     }
                     Date GetCurrentTime = Calendar.getInstance().getTime();
-                    String Date = DateFormat.format("yyyy-MM-dd HH:mm:ss", GetCurrentTime).toString();
+                    String Date = DateFormat.format("yyyy_MM_dd_HH_mm_ss", GetCurrentTime).toString();
                     File f = new File(rootPath + "RH_Network" + "_" + Date + "_" + "Report.csv");
                     if (!f.exists()) {
                         f.createNewFile();
@@ -201,7 +203,7 @@ public class MainActivity2 extends AppCompatActivity {
                     out.close();
                     try {
                         writeFileOnInternalStorage("RH_Network" + "_" + Date + "_" + "Report.csv", data);
-                        Toast.makeText(getApplicationContext(), " data added to 'Report.csv' with success  ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), " Data added  with success  ", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -239,6 +241,7 @@ public class MainActivity2 extends AppCompatActivity {
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             float batteryPct = level * 100 / (float) scale;
             batteryTxt.setText(String.valueOf(batteryPct) + "%");
+            data = data + " Battery Level: " +batteryPct+ "\n";
         }
     };
 
@@ -247,6 +250,7 @@ public class MainActivity2 extends AppCompatActivity {
         CureentTime = DateFormat.format(" HH:mm:ss", GetCurrentTime).toString();
         String Date = DateFormat.format("yyyy-MM-dd HH:mm:ss", GetCurrentTime).toString();
         CurrentDate = Date;
+        data = data + " CurrentDate: " +CurrentDate+ "\n";
     }
 
 
@@ -297,7 +301,7 @@ public class MainActivity2 extends AppCompatActivity {
 
             linearLayout.addView(tv);
 
-            data = data + Date + "_" + part + "\n";
+            data =  part + "\n";
         }
     }
 
@@ -310,7 +314,7 @@ public class MainActivity2 extends AppCompatActivity {
             tv.setText(String.valueOf(part));
             tv.setBackground(ContextCompat.getDrawable(this, R.drawable.common_google_signin_btn_icon_light_normal_background));
             tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
+            data = data + part+ "\n";
             linearLayout.addView(tv);
 
         }
@@ -320,6 +324,7 @@ public class MainActivity2 extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.O)
     private ArrayList<String> getPhone() {
         TelephonyManager phoneMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        GsmCellLocation cellLocation = (GsmCellLocation)phoneMgr.getCellLocation();
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), WantPermission) != PackageManager.PERMISSION_GRANTED) {
             return null;
         }
@@ -352,6 +357,8 @@ public class MainActivity2 extends AppCompatActivity {
         }
         _lst.add("CallState  : " + (phoneMgr.getCallState()));
         _lst.add("IMEI NUMBER : " + phoneMgr.getImei());
+        _lst.add("CID : " + cellLocation.getCid());
+        _lst.add("LAC: " + cellLocation.getLac());
         _lst.add("MOBILE NUMBER : " + phoneMgr.getLine1Number());
         _lst.add("SERIAL NUMBER : " + phoneMgr.getSimSerialNumber());
         _lst.add("SIM OPERATOR NAME : " + phoneMgr.getSimOperatorName());
@@ -359,7 +366,9 @@ public class MainActivity2 extends AppCompatActivity {
         _lst.add("SIM STATE : " + (phoneMgr.getSimState()));
         _lst.add("COUNTRY ISO : " + phoneMgr.getSimCountryIso());
         _lst.add("SoftwareVersion : " + phoneMgr.getDeviceSoftwareVersion());
-        _lst.add("getPhoneType : " + phoneMgr.getPhoneType());
+        _lst.add("PhoneType : " + phoneMgr.getPhoneType());
+        _lst.add("CID : " + cellLocation.getCid());
+        _lst.add("LAC: " + cellLocation.getLac());
         return _lst;
     }
 
@@ -418,7 +427,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-    void Alert(StringBuilder Message, Context context) {
+   /* void Alert(StringBuilder Message, Context context) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Report: ");
         alertDialog.setMessage(Message);
@@ -429,7 +438,7 @@ public class MainActivity2 extends AppCompatActivity {
                     }
                 });
         alertDialog.show();
-    }
+    }*/
 
     void getPosition() {
 
@@ -457,6 +466,7 @@ public class MainActivity2 extends AppCompatActivity {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 PositionView.setText("latitude: " + latitude + "       " + "Longitude: " + longitude);
+                data = data + "latitude: " + latitude  + "\r" + "Longitude: " + longitude + "\n"  ;
             }
         };
         myLocation.getLocation(getApplicationContext(), locationResult);
@@ -470,20 +480,12 @@ public class MainActivity2 extends AppCompatActivity {
         }
         // int mcc = Integer.parseInt(Integer.valueOf(phoneMgr.getSubscriberId()).substring(0, 3));
         // int mnc = Integer.parseInt(phoneMgr.getSubscriberId().substring(3));
-        if ((phoneMgr.getSubscriberId()).length() > 0) {
+        Log.e("test",phoneMgr.getSubscriberId());
+        if ((phoneMgr.getSubscriberId()).length() >0) {
             MCCMNCSIMView.setText("MNC: " + (phoneMgr.getSubscriberId()).substring(3, 5) + "   " + "MCC: " + (phoneMgr.getSubscriberId()).substring(0, 3));
+            data = data + "MNC: " + (phoneMgr.getSubscriberId()).substring(3, 5) + "\n" +"MCC: " + (phoneMgr.getSubscriberId()).substring(0, 3) + "\n"  ;
         }
 
-       /* Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            String city = addresses.get(0).getLocality();
-            String state = addresses.get(0).getAdminArea();
-            String country = addresses.get(0).getCountryName();
-            String postalCode = addresses.get(0).getPostalCode();
-            String knownName = addresses.get(0).getFeatureName();*/
 
 
     }
